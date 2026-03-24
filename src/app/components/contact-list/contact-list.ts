@@ -31,9 +31,10 @@ export class ContactListComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.loadContacts();
+    if (this.contacts().length === 0) {
+      this.loadContacts();
+    }
   }
-
   loadContacts(): void {
     this.contactService.getAll().subscribe({
       error: (err) => console.error('Erreur:', err),

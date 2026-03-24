@@ -37,10 +37,13 @@ export class ContactService {
   create(contact: Partial<Contact>): Observable<Contact> {
     return this.http.post<Contact>(this.apiUrl, contact).pipe(
       tap((newContact) => {
+        console.log('ADDING TO LIST:', newContact);
         this._localContacts.update((list) => [...list, newContact]);
       }),
       catchError((err) => this.handleError(err)),
     );
+
+
   }
 
   update(id: number, contact: Partial<Contact>): Observable<Contact> {

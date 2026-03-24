@@ -80,6 +80,13 @@ export class ContactFormComponent implements OnInit {
         next: () => this.router.navigate(['/contacts']),
       });
     }
+    this.contactService.create(data).subscribe({
+      next: (result) => {
+        console.log('CREATED:', result); // add this
+        this.router.navigate(['/contacts']);
+      },
+      error: (err) => console.log('ERROR:', err), // add this
+    });
   }
 
   onCancel(): void {
