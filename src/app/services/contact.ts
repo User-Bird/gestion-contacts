@@ -42,15 +42,14 @@ export class ContactService {
       }),
       catchError((err) => this.handleError(err)),
     );
-
-
   }
 
   update(id: number, contact: Partial<Contact>): Observable<Contact> {
     return this.http.put<Contact>(`${this.apiUrl}/${id}`, contact).pipe(
-      tap((updated) => {
+      tap(() => {
+        // ← ignore the API response, use contact directly
         this._localContacts.update((list) =>
-          list.map((c) => (c.id === id ? { ...c, ...updated } : c)),
+          list.map((c) => (c.id === id ? { ...c, ...contact } : c)),
         );
       }),
       catchError((err) => this.handleError(err)),

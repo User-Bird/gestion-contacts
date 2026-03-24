@@ -27,12 +27,12 @@ export class ContactFormComponent implements OnInit {
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9+\-\s()]{8,15}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9+\-\s()x]{7,20}$/)]],
       address: this.fb.group({
         street: ['', Validators.required],
         suite: [''],
         city: ['', Validators.required],
-        zipcode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
+        zipcode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}(-[0-9]{4})?$/)]],
       }),
       company: this.fb.group({
         name: ['', Validators.required],
@@ -50,6 +50,13 @@ export class ContactFormComponent implements OnInit {
   }
 
   loadContact(id: number): void {
+    // Check local cache first
+    const local = this.contactService.localContacts().find((c) => c.id === id);
+    if (local) {
+      this.contactForm.patchValue(local);
+      return;
+    }
+
     this.contactService.getById(id).subscribe({
       next: (contact) => {
         this.contactForm.patchValue(contact);
@@ -80,13 +87,6 @@ export class ContactFormComponent implements OnInit {
         next: () => this.router.navigate(['/contacts']),
       });
     }
-    this.contactService.create(data).subscribe({
-      next: (result) => {
-        console.log('CREATED:', result); // add this
-        this.router.navigate(['/contacts']);
-      },
-      error: (err) => console.log('ERROR:', err), // add this
-    });
   }
 
   onCancel(): void {
