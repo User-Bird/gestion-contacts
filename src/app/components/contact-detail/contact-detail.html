@@ -1,0 +1,21 @@
+<div class="detail-page">
+  @if (loading()) {
+    <p>Chargement des détails...</p>
+  } @else if (contact()) {
+    <div class="detail-card">
+      <h2>{{ contact()?.name }}</h2>
+      <p><strong>Email:</strong> {{ contact()?.email }}</p>
+
+      <p><strong>Téléphone:</strong> {{ contact()!.phone | phoneFormat }}</p>
+
+      <p><strong>Entreprise:</strong> {{ contact()?.company?.name }}</p>
+      <p><strong>Adresse:</strong> {{ contact()?.address?.street }}, {{ contact()?.address?.city }}</p>
+
+      <div class="actions">
+        <a routerLink="/contacts" class="btn-back">Retour à la liste</a>
+        <a [routerLink]="['/contacts', contact()?.id, 'edit']" class="btn-edit">Modifier</a>
+        <button (click)="deleteContact()" class="btn-delete">Supprimer</button>
+      </div>
+    </div>
+  }
+</div>

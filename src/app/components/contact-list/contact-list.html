@@ -1,0 +1,36 @@
+<div class="contact-list-page">
+  <div class="toolbar">
+    <h2>Mes Contacts ({{ filteredContacts().length }})</h2>
+    <a routerLink="/contacts/new" class="btn-add">+ Nouveau contact</a>
+  </div>
+
+  <input type="text" class="search-input"
+         [ngModel]="searchTerm()"
+         (ngModelChange)="onSearchChange($event)"
+         placeholder="Rechercher par nom, email ou entreprise...">
+
+  @if (loading()) {
+    <div class="loading">
+      <p>Chargement des contacts...</p>
+    </div>
+  }
+
+  @if (serviceError()) {
+    <div class="error-state">
+      <p>{{ serviceError() }}</p>
+      <button (click)="loadContacts()">Réessayer</button>
+    </div>
+  }
+
+  @for (contact of filteredContacts(); track contact.id) {
+    <app-contact-card
+      [contact]="contact"
+      (deleted)="deleteContact($event)" />
+  } @empty {
+    @if (!loading()) {
+      <div class="empty-state">
+        <p>Aucun contact trouvé.</p>
+      </div>
+    }
+  }
+</div>

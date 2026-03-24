@@ -1,0 +1,93 @@
+<div class="form-page">
+  <h2>{{ isEditMode ? 'Modifier' : 'Nouveau' }} Contact</h2>
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-group">
+      <label for="name">Nom complet *</label>
+      <input id="name" formControlName="name" type="text"
+             [class.error]="f['name'].invalid && f['name'].touched" />
+      @if (f['name'].invalid && f['name'].touched) {
+        <div class="error-msg">
+          @if (f['name'].errors?.['required']) {
+            <small>Le nom est obligatoire</small>
+          }
+          @if (f['name'].errors?.['minlength']) {
+            <small>Minimum 3 caracteres</small>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input id="email" formControlName="email" type="email"
+             [class.error]="f['email'].invalid && f['email'].touched" />
+      @if (f['email'].invalid && f['email'].touched) {
+        <div class="error-msg">
+          @if (f['email'].errors?.['required']) {
+            <small>L'email est obligatoire</small>
+          }
+          @if (f['email'].errors?.['email']) {
+            <small>Format email invalide</small>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telephone *</label>
+      <input id="phone" formControlName="phone" type="tel"
+             [class.error]="f['phone'].invalid && f['phone'].touched" />
+      @if (f['phone'].invalid && f['phone'].touched) {
+        <div class="error-msg">
+          @if (f['phone'].errors?.['pattern']) {
+            <small>Format: 0612345678 ou +212612345678</small>
+          }
+        </div>
+      }
+    </div>
+
+    <fieldset formGroupName="address">
+      <legend>Adresse</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Rue *</label>
+          <input formControlName="street" />
+        </div>
+        <div class="form-group">
+          <label>Complement</label>
+          <input formControlName="suite" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Ville *</label>
+          <input formControlName="city" />
+        </div>
+        <div class="form-group">
+          <label>Code postal *</label>
+          <input formControlName="zipcode" />
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset formGroupName="company">
+      <legend>Entreprise</legend>
+      <div class="form-group">
+        <label>Nom de l'entreprise *</label>
+        <input formControlName="name" />
+      </div>
+      <div class="form-group">
+        <label>Slogan</label>
+        <input formControlName="catchPhrase" />
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">Annuler</button>
+      <button type="submit" class="btn-submit" [disabled]="contactForm.invalid">
+        {{ isEditMode ? 'Enregistrer' : 'Creer' }}
+      </button>
+    </div>
+  </form>
+</div>

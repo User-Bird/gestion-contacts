@@ -1,0 +1,27 @@
+.contact-list-page { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.btn-add {
+  background: #059669;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 1rem;
+}
+
+.search-input:focus { border-color: #0ea5e9; outline: none; }
