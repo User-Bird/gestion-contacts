@@ -9,7 +9,7 @@ import { ContactService } from '../../services/contact';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './contact-form.html',
-  styleUrl: './contact-form.css'
+  styleUrl: './contact-form.css',
 })
 export class ContactFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -20,6 +20,7 @@ export class ContactFormComponent implements OnInit {
   contactForm!: FormGroup;
   isEditMode = false;
   contactId: number | null = null;
+  submitted = false;
 
   ngOnInit(): void {
     // Construire le formulaire avec FormBuilder
@@ -31,12 +32,12 @@ export class ContactFormComponent implements OnInit {
         street: ['', Validators.required],
         suite: [''],
         city: ['', Validators.required],
-        zipcode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]]
+        zipcode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
       }),
       company: this.fb.group({
         name: ['', Validators.required],
-        catchPhrase: ['']
-      })
+        catchPhrase: [''],
+      }),
     });
 
     // Mode edition charger le contact
@@ -53,26 +54,30 @@ export class ContactFormComponent implements OnInit {
       next: (contact) => {
         this.contactForm.patchValue(contact);
       },
-      error: () => this.router.navigate(['/contacts'])
+      error: () => this.router.navigate(['/contacts']),
     });
   }
 
   // Getter pour acceder facilement aux champs
-  get f() { return this.contactForm.controls; }
+  get f() {
+    return this.contactForm.controls;
+  }
 
   onSubmit(): void {
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
       return;
     }
+    this.submitted = true; // ← mark as submitted before navigating
     const data = this.contactForm.value;
     if (this.isEditMode && this.contactId) {
-      this.contactService.update(this.contactId, data).subscribe({
-        next: () => this.router.navigate(['/contacts', this.contactId])
+      const id = this.contactId;
+      this.contactService.update(id, data).subscribe({
+        next: () => this.router.navigate(['/contacts']),
       });
     } else {
       this.contactService.create(data).subscribe({
-        next: () => this.router.navigate(['/contacts'])
+        next: () => this.router.navigate(['/contacts']),
       });
     }
   }
