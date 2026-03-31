@@ -23,7 +23,7 @@ export class ContactFormComponent implements OnInit {
   submitted = false;
 
   ngOnInit(): void {
-    // Construire le formulaire avec FormBuilder
+    // builds the form
     this.contactForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email]],
@@ -40,17 +40,17 @@ export class ContactFormComponent implements OnInit {
       }),
     });
 
-    // Mode edition charger le contact
+    // paramMap.get('id') reads the :id from the URL
     const id = this.route.snapshot.paramMap.get('id');
     if (id && id !== 'new') {
       this.isEditMode = true;
-      this.contactId = Number(id); // Fixed the PDF's type error here
+      this.contactId = Number(id);
       this.loadContact(this.contactId);
     }
   }
 
+  // check cache before hitting the API
   loadContact(id: number): void {
-    // Check local cache first
     const local = this.contactService.localContacts().find((c) => c.id === id);
     if (local) {
       this.contactForm.patchValue(local);
@@ -65,18 +65,22 @@ export class ContactFormComponent implements OnInit {
     });
   }
 
-  // Getter pour acceder facilement aux champs
+  // Getter
   get f() {
     return this.contactForm.controls;
   }
 
+  // Check if the form is invalid
   onSubmit(): void {
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
       return;
     }
-    this.submitted = true; // ← mark as submitted before navigating
-    const data = this.contactForm.value;
+    this.submitted = true; // ← mark as submitted before navigating The guard check this
+    const data = this.contactForm.value; //  extracts the current form data as a plain object
+
+    // Edit mode → call update()
+    //Create mode → call create()
     if (this.isEditMode && this.contactId) {
       const id = this.contactId;
       this.contactService.update(id, data).subscribe({
@@ -89,6 +93,7 @@ export class ContactFormComponent implements OnInit {
     }
   }
 
+  // submitted stay false in onCancel so the guard warn the user
   onCancel(): void {
     this.router.navigate(['/contacts']);
   }

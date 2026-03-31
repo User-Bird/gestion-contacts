@@ -21,26 +21,44 @@ import { Contact } from '../../models/contact.interface';
         <button (click)="onDelete()" class="btn-delete">Supprimer</button>
       </div>
     </div>
-  `
+  `,
 })
 export class ContactCardComponent {
   // input() receives data from the parent component
   contact = input.required<Contact>();
 
   // output() sends events back up to the parent component
+  // A delete event sent back up to the list when the user clicks delete
   deleted = output<number>();
 
   initials() {
-    return this.contact().name
-      .split(' ')
-      .map(n => n[0])
+    return this.contact()
+      .name.split(' ')
+      .map((n) => n[0])
       .join('')
       .toUpperCase();
   }
 
+  // this component never touches the service directly. It doesn't know what happens after it emits
+  //  It just says "I want this deleted" and lets the parent handle it
   onDelete() {
     if (confirm(`Supprimer ${this.contact().name} ?`)) {
       this.deleted.emit(this.contact().id);
     }
   }
 }
+
+
+// ContactListComponent
+//   │
+//   │  passes contact object DOWN via [contact]
+//   │
+// ContactCardComponent
+//   │
+//   │  sends id UP via (deleted) when user confirms delete
+//   │
+// ContactListComponent.deleteContact(id)
+//   │
+//   │  calls service
+//   │
+// ContactService.delete(id) → cache updates → list rerenders
