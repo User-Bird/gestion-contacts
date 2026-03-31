@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* src/styles.css */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 24px; }
+a { color: #0ea5e9; text-decoration: none; }
+/* Le reste des styles est a implementer par l'etudiant */
