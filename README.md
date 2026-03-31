@@ -6,7 +6,7 @@
 
 ### 2. Installation
 ```bash
-# Cloner projet
+# Clone projet
 git clone https://github.com/User-Bird/gestion-contacts.git
 cd gestion-contacts
 
